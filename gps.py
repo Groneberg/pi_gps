@@ -1,26 +1,26 @@
-import gps
+import serial
 
-# GPS-Verbindung herstellen
-session = gps.gps("localhost", "2947")
-session.stream(gps.WATCH_ENABLE | gps.WATCH_NEWSTYLE)
+# Serielle Schnittstelle konfigurieren
+ser = serial.Serial('/dev/ttyAMA0', baudrate=9600, timeout=1)
 
+# Endlosschleife zum Lesen der GPS-Daten
 while True:
-    try:
-        # Daten von GPS-Modul empfangen
-        report = session.next()
+    # Zeile von der seriellen Schnittstelle lesen
+    line = ser.readline().decode('utf-8').strip()
 
-        if report['class'] == 'TPV':
-            if hasattr(report, 'lat') and hasattr(report, 'lon'):
-                latitude = report.lat
-                longitude = report.lon
-                print("Latitude: ", latitude)
-                print("Longitude: ", longitude)
+    # Nur die NMEA-Zeilen verarbeiten
+    if line.startswith('$GNGGA'):
+        data = line.split(',')
 
-    except KeyboardInterrupt:
-        # Skript bei Tastaturunterbrechung beenden
-        break
+        # Positionsinformationen extrahieren
+        latitude = data[2]
+        longitude = data[4]
+        altitude = data[9]
 
-    except StopIteration:
-        # GPS-Stream beendet
-        print("GPS-Stream beendet")
+        # Ausgabe der GPS-Daten
+        print('Latitude: {}'.format(latitude))
+        print('Longitude: {}'.format(longitude))
+        print('Altitude: {}'.format(altitude))
 
+# Serielle Verbindung schließen
+ser.close()
