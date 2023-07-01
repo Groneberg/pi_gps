@@ -23,6 +23,16 @@ while True:
         print('Latitude: {}'.format(latitude))
         print('Longitude: {}'.format(longitude))
         print('Altitude: {}'.format(altitude))
+    if line.startswith('$GNRMC'):
+        gps_data = line.split(',')
+
+        # Breitengrad und Längengrad extrahieren
+        latitude = gps_data[3]
+        longitude = gps_data[5]
+
+        # Ausgabe der GPS-Daten
+        print('Latitude:', latitude)
+        print('Longitude:', longitude)
 
 # Serielle Verbindung schließen
 ser.close()
