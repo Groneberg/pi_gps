@@ -27,34 +27,29 @@
 # # Serielle Verbindung schließen
 # ser.close()
 
-import serial  # import serial pacakge
+import serial
 from time import sleep
-import webbrowser  # import package for opening link in browser
-import sys  # import system package
 
-
+# Funktion zur GPS-Informationsermittlung
 def GPS_Info():
     global NMEA_buff
     global lat_in_degrees
     global long_in_degrees
-    nmea_time = []
-    nmea_latitude = []
-    nmea_longitude = []
-    nmea_time = NMEA_buff[0]  # extract time from GPGGA string
-    nmea_latitude = NMEA_buff[1]  # extract latitude from GPGGA string
-    nmea_longitude = NMEA_buff[3]  # extract longitude from GPGGA string
+    nmea_time = NMEA_buff[0]  # Zeit aus dem GPGGA-String extrahieren
+    nmea_latitude = NMEA_buff[1]  # Breitengrad aus dem GPGGA-String extrahieren
+    nmea_longitude = NMEA_buff[3]  # Längengrad aus dem GPGGA-String extrahieren
 
     print("NMEA Time: ", nmea_time, '\n')
     print("NMEA Latitude:", nmea_latitude, "NMEA Longitude:", nmea_longitude, '\n')
 
-    lat = float(nmea_latitude)  # convert string into float for calculation
-    longi = float(nmea_longitude)  # convertr string into float for calculation
+    lat = float(nmea_latitude)  # String in eine Gleitkommazahl für Berechnungen umwandeln
+    longi = float(nmea_longitude)  # String in eine Gleitkommazahl für Berechnungen umwandeln
 
-    lat_in_degrees = convert_to_degrees(lat)  # get latitude in degree decimal format
-    long_in_degrees = convert_to_degrees(longi)  # get longitude in degree decimal format
+    lat_in_degrees = convert_to_degrees(lat)  # Breitengrad im Dezimalformat erhalten
+    long_in_degrees = convert_to_degrees(longi)  # Längengrad im Dezimalformat erhalten
 
 
-# convert raw NMEA string into degree decimal format
+# Funktion zur Konvertierung der rohen NMEA-Zeichenkette in das Grad-Dezimalformat
 def convert_to_degrees(raw_value):
     decimal_value = raw_value / 100.00
     degrees = int(decimal_value)
@@ -65,7 +60,7 @@ def convert_to_degrees(raw_value):
 
 
 gpgga_info = "$GPGGA,"
-ser = serial.Serial("/dev/ttyS0")  # Open port with baud rate
+ser = serial.Serial("/dev/ttyS0")  # Port mit Baudrate öffnen
 GPGGA_buffer = 0
 NMEA_buff = 0
 lat_in_degrees = 0
@@ -73,19 +68,19 @@ long_in_degrees = 0
 
 try:
     while True:
-        received_data = (str)(ser.readline())  # read NMEA string received
-        GPGGA_data_available = received_data.find(gpgga_info)  # check for NMEA GPGGA string
-        if (GPGGA_data_available > 0):
-            GPGGA_buffer = received_data.split("$GPGGA,", 1)[1]  # store data coming after "$GPGGA," string
-            NMEA_buff = (GPGGA_buffer.split(','))  # store comma separated data in buffer
-            GPS_Info()  # get time, latitude, longitude
+        received_data = str(ser.readline())  # Empfangene NMEA-Zeichenkette lesen
+        GPGGA_data_available = received_data.find(gpgga_info)  # Nach NMEA GPGGA-Zeichenkette suchen
+        if GPGGA_data_available > 0:
+            GPGGA_buffer = received_data.split("$GPGGA,", 1)[1]  # Daten nach der Zeichenkette "$GPGGA," speichern
+            NMEA_buff = GPGGA_buffer.split(',')  # Durch Kommas getrennte Daten im Puffer speichern
+            GPS_Info()  # Zeit, Breitengrad, Längengrad abrufen
 
             print("lat in degrees:", lat_in_degrees, " long in degree: ", long_in_degrees, '\n')
-            map_link = 'http://maps.google.com/?q=' + lat_in_degrees + ',' + long_in_degrees  # create link to plot location on Google map
-            print(
-                "<<<<<<<<press ctrl+c to plot location on google maps>>>>>>\n")  # press ctrl+c to plot on map and exit
+            # Link erstellen, um den Standort auf Google Maps anzuzeigen
+            map_link = 'http://maps.google.com/?q=' + lat_in_degrees + ',' + long_in_degrees
+            print("<<<<<<<<<<<press ctrl+c to plot location on google maps>>>>>>>>>>\n")
             print("------------------------------------------------------------\n")
 
 except KeyboardInterrupt:
-    webbrowser.open(map_link)  # open current position information in google map
-    sys.exit(0)
+    # Aktuelle Positionsinformationen in Google Maps öffnen
+    webbrowser.open(map_link)
