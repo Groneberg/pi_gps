@@ -13,7 +13,21 @@ while True:
     # Nur die NMEA-Zeilen verarbeiten
     if line.startswith('$GNGGA'):
         data = line.split(',')
-        print("data", data)
+        print("UTC-Zeit", data[1])
+        print("Breitengrad", data[2])
+        print("Breitengrad-Richtung", data[3])
+        print("Längengrad", data[4])
+        print("Längengrad-Richtung", data[5])
+        print("GPS-Qualitätsindikator", data[6])
+        print("Anzahl der verwendeten Satelliten", data[7])
+        print("HDOP", data[8])
+        print("Höhe über dem Meeresspiegel", data[9])
+        print("Höheneinheit", data[10])
+        print("Geoid-Höhe", data[11])
+        print("Geoid-Höhen-Einheit", data[12])
+        print("Zeit seit der letzten DGPS-Aktualisierung", data[13])
+        print("DGPS-Referenzstation-ID", data[14])
+
 #         # Positionsinformationen extrahieren
 #         latitude = data[2]
 #         longitude = data[4]
