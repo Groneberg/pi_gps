@@ -40,9 +40,9 @@ while True:
     #         print('Altitude: {}'.format(altitude))
         if line.startswith('$GNRMC'):
             GNRMC_data = line.split(',')
-            print("Status:", GNRMC_data[3])
-            print("Geschwindigkeit über Grund:", GNRMC_data[9])
-            print("Modus:", GNRMC_data[14])
+            print("Status:", GNRMC_data[2])
+            print("Geschwindigkeit über Grund:", GNRMC_data[7])
+            print("Modus:", GNRMC_data[12])
     #         # Breitengrad und Längengrad extrahieren
     #         latitude = gps_data[3]
     #         longitude = gps_data[5]
