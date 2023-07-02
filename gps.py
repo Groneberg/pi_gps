@@ -1,13 +1,20 @@
 import serial
 
 # Serielle Schnittstelle konfigurieren
-ser = serial.Serial('/dev/ttyS0', baudrate=9600, timeout=1)
-print(ser)
+ser1 = serial.Serial('/dev/ttyS0', baudrate=9600, timeout=1)
+ser2 = serial.Serial('/dev/ttyS0', baudrate=9600, timeout=1)
+ser3 = serial.Serial('/dev/ttyS0', baudrate=9600, timeout=1)
+print("ser1", ser1)
+print("----")
+print("ser2", ser2)
+print("----")
+print("ser3", ser3)
+print("----")
 
 # Endlosschleife zum Lesen der GPS-Daten
 while True:
     # Zeile von der seriellen Schnittstelle lesen
-    line = ser.readline().decode('utf-8').strip()
+    line = ser1.readline().decode('utf-8').strip()
     print(line)
 
 #     # Nur die NMEA-Zeilen verarbeiten
