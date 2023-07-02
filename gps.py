@@ -8,7 +8,7 @@ print(ser)
 while True:
     # Zeile von der seriellen Schnittstelle lesen
     line = ser.readline().decode('utf-8').strip()
-    print(line)
+    # print(line)
 
     # Nur die NMEA-Zeilen verarbeiten
     if line.startswith('$GNGGA'):
