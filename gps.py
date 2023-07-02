@@ -17,13 +17,13 @@ while True:
     # Zeile von der seriellen Schnittstelle lesen
     line1 = ser1.readline().decode('utf-8').strip()
     print(line1)
-    print("----")
+    print("----1")
     line2 = ser2.readline().decode('utf-8').strip()
     print(line2)
-    print("----")
+    print("----2")
     line3 = ser3.readline().decode('utf-8').strip()
     print(line3)
-    print("----")
+    print("----3")
 
 #     # Nur die NMEA-Zeilen verarbeiten
 #     if line.startswith('$GNGGA'):
