@@ -11,9 +11,9 @@ while True:
     print(line)
 
     # Nur die NMEA-Zeilen verarbeiten
-#     if line.startswith('$GNGGA'):
-#         data = line.split(',')
-#         print("data", data)
+    if line.startswith('b\'$GNGGA'):
+        data = line.split(',')
+        print("data", data)
 #         # Positionsinformationen extrahieren
 #         latitude = data[2]
 #         longitude = data[4]
