@@ -10,7 +10,7 @@ while True:
         # Zeile von der seriellen Schnittstelle lesen
         # line = ser.readline().decode('utf-8').strip()
         line = ser.readline().decode('latin-1').strip()
-        # print(line)
+        print(line)
 
         # Nur die NMEA-Zeilen verarbeiten
         if line.startswith('$GNGGA'):
