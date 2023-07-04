@@ -1,7 +1,7 @@
 import serial
 
 # Serielle Schnittstelle konfigurieren
-ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=1)
+ser = serial.Serial('/dev/ttyAMA0', baudrate=9600, timeout=1)
 print(ser)
 
 # Endlosschleife zum Lesen der GPS-Daten
