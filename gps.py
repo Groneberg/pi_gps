@@ -24,6 +24,10 @@ class GPS:
     magnetic_divergence_direction: str = None
     status: str = None
     mode: str = None
+    compas: float = None
+    compas_direction: str = None
+    deviation: float = None
+    deviation_direction: str = None
 
     def extract_data(self):
         line = self.ser.readline().decode('utf-8').strip()
@@ -47,12 +51,19 @@ class GPS:
 
         if line.startswith('$GNRMC'):
             gnrmc_data = line.split(',')
-            self.status = gnrmc_data[2]
-            self.velocity = float(gnrmc_data[7])
-            self.heading = float(gnrmc_data[8])
-            self.magnetic_divergence = float(gnrmc_data[10])
-            self.magnetic_divergence_direction = gnrmc_data[11]
-            self.mode = gnrmc_data[12]
+            self.compas = float(gnrmc_data[1])
+            self.compas_direction = gnrmc_data[2]
+            self.deviation = float(gnrmc_data[3])
+            self.deviation_direction = gnrmc_data[4]
+
+        if line.startswith('$HCHDG'):
+            hchdg_data = line.split(',')
+            self.compas = hchdg_data[2]
+            self.velocity = float(hchdg_data[7])
+            self.heading = float(hchdg_data[8])
+            self.magnetic_divergence = float(hchdg_data[10])
+            self.magnetic_divergence_direction = hchdg_data[11]
+            self.mode = hchdg_data[12]
 
     def get_data(self):
         return {
