@@ -86,7 +86,11 @@ class GPS:
             "magnetic_divergence": self.magnetic_divergence,
             "magnetic_divergence_direction": self.magnetic_divergence_direction,
             "status": self.status,
-            "mode": self.mode
+            "mode": self.mode,
+            "compas": self.compas,
+            "compas direction":self.compas_direction,
+            "deviation":self.deviation,
+            "deviation direction":self.deviation_direction
         }
 
     def __str__(self):
@@ -105,6 +109,10 @@ class GPS:
         data_str += f"Magnetic Divergence: {self.magnetic_divergence} {self.magnetic_divergence_direction}\n"
         data_str += f"Status: {self.status}\n"
         data_str += f"Mode: {self.mode}\n"
+        data_str += f"Compas: {self.compas}\n"
+        data_str += f"Compas direction: {self.compas_direction}\n"
+        data_str += f"Deviation: {self.deviation}\n"
+        data_str += f"Deviation direction: {self.deviation_direction}\n"
         return data_str
 
 
