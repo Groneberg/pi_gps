@@ -30,6 +30,7 @@ class GPS:
 
         if line.startswith('$GNGGA'):
             gngga_data = line.split(',')
+            print("utc-time", gngga_data[1])
             self.utc_time = datetime.strptime(gngga_data[1], "%H%M%S.%f")
             self.latitude = float(gngga_data[2])
             self.latitude_direction = gngga_data[3]
@@ -52,6 +53,7 @@ class GPS:
             self.course = float(gnrmc_data[8])
             self.magnetic_divergence = float(gnrmc_data[10])
             self.magnetic_divergence_direction = gnrmc_data[11]
+            print("mode", gnrmc_data[12])
             self.mode = gnrmc_data[12]
 
     def get_data(self):
