@@ -4,33 +4,32 @@ from datetime import datetime
 
 class GPS:
     ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=1)
-    utc_time: datetime = 0
-    latitude: float = 0
-    latitude_direction: str = 0
-    longitude: float = 0
-    longitude_direction: str = 0
-    gps_quality_indicator: int = 0
-    number_of_satellites_used: int = 0
-    hdop: float = 0
-    altitude: float = 0
-    altitude_unit: str = ""
-    geo_id_altitude: float = 0
-    geo_id_altitude_unit: str = ""
-    time_since_last_dgps_update: str = ""
-    dgps_reference_station_id: str = ""
-    velocity: float = 0
-    course: float = None
-    magnetic_divergence: float = 0
-    magnetic_divergence_direction: str = ""
-    status: str = ""
-    mode: str = ""
+    utc_time: datetime = None
+    latitude: float = None
+    latitude_direction: str = None
+    longitude: float = None
+    longitude_direction: str = None
+    gps_quality_indicator: int = None
+    number_of_satellites_used: int = None
+    hdop: float = None
+    altitude: float = None
+    altitude_unit: str = None
+    geo_id_altitude: float = None
+    geo_id_altitude_unit: str = None
+    time_since_last_dgps_update: str = None
+    dgps_reference_station_id: str = None
+    velocity: float = None
+    heading: float = None
+    magnetic_divergence: float = None
+    magnetic_divergence_direction: str = None
+    status: str = None
+    mode: str = None
 
     def extract_data(self):
         line = self.ser.readline().decode('utf-8').strip()
 
         if line.startswith('$GNGGA'):
             gngga_data = line.split(',')
-            print("utc-time", gngga_data[1])
             self.utc_time = datetime.strptime(gngga_data[1], "%H%M%S.%f")
             self.latitude = float(gngga_data[2])
             self.latitude_direction = gngga_data[3]
@@ -50,10 +49,9 @@ class GPS:
             gnrmc_data = line.split(',')
             self.status = gnrmc_data[2]
             self.velocity = float(gnrmc_data[7])
-            self.course = float(gnrmc_data[8])
+            self.heading = float(gnrmc_data[8])
             self.magnetic_divergence = float(gnrmc_data[10])
             self.magnetic_divergence_direction = gnrmc_data[11]
-            print("mode", gnrmc_data[12])
             self.mode = gnrmc_data[12]
 
     def get_data(self):
@@ -73,12 +71,30 @@ class GPS:
             "time_since_last_dgps_update": self.time_since_last_dgps_update,
             "dgps_reference_station_id": self.dgps_reference_station_id,
             "velocity": self.velocity,
-            "course": self.course,
+            "heading": self.heading,
             "magnetic_divergence": self.magnetic_divergence,
             "magnetic_divergence_direction": self.magnetic_divergence_direction,
             "status": self.status,
             "mode": self.mode
         }
+
+    def __str__(self):
+        data_str = f"UTC Time: {self.utc_time}\n"
+        data_str += f"Latitude: {self.latitude} {self.latitude_direction}\n"
+        data_str += f"Longitude: {self.longitude} {self.longitude_direction}\n"
+        data_str += f"GPS Quality Indicator: {self.gps_quality_indicator}\n"
+        data_str += f"Number of Satellites Used: {self.number_of_satellites_used}\n"
+        data_str += f"HDOP: {self.hdop}\n"
+        data_str += f"Altitude: {self.altitude} {self.altitude_unit}\n"
+        data_str += f"Geoid Altitude: {self.geo_id_altitude} {self.geo_id_altitude_unit}\n"
+        data_str += f"Time Since Last DGPS Update: {self.time_since_last_dgps_update}\n"
+        data_str += f"DGPS Reference Station ID: {self.dgps_reference_station_id}\n"
+        data_str += f"Velocity: {self.velocity}\n"
+        data_str += f"Heading: {self.heading}\n"
+        data_str += f"Magnetic Divergence: {self.magnetic_divergence} {self.magnetic_divergence_direction}\n"
+        data_str += f"Status: {self.status}\n"
+        data_str += f"Mode: {self.mode}\n"
+        return data_str
 
 
 # Endlosschleife zum Lesen der GPS-Daten
