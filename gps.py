@@ -1,58 +1,92 @@
 import serial
+from datetime import datetime
 
-# Serielle Schnittstelle konfigurieren
-ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=1)
-print(ser)
+
+class GPS:
+    ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=1)
+    utc_time: datetime = 0
+    latitude: float = 0
+    latitude_direction: str = 0
+    longitude: float = 0
+    longitude_direction: str = 0
+    gps_quality_indicator: int = 0
+    number_of_satellites_used: int = 0
+    hdop: float = 0
+    altitude: float = 0
+    altitude_unit: str = ""
+    geo_id_altitude: float = 0
+    geo_id_altitude_unit: str = ""
+    time_since_last_dgps_update: str = ""
+    dgps_reference_station_id: str = ""
+    velocity: float = 0
+    course: float = 0
+    magnetic_divergence: float = 0
+    magnetic_divergence_direction: str = ""
+    status: str = ""
+    mode: str = ""
+
+    def extract_data(self):
+        line = self.ser.readline().decode('utf-8').strip()
+
+        if line.startswith('$GNGGA'):
+            gngga_data = line.split(',')
+            self.utc_time = datetime.strptime(gngga_data[1], "%H%M%S.%f")
+            self.latitude = float(gngga_data[2])
+            self.latitude_direction = gngga_data[3]
+            self.longitude = float(gngga_data[4])
+            self.longitude_direction = gngga_data[5]
+            self.gps_quality_indicator = int(gngga_data[6])
+            self.number_of_satellites_used = int(gngga_data[7])
+            self.hdop = float(gngga_data[8])
+            self.altitude = float(gngga_data[9])
+            self.altitude_unit = gngga_data[10]
+            self.geo_id_altitude = float(gngga_data[11])
+            self.geo_id_altitude_unit = gngga_data[12]
+            self.time_since_last_dgps_update = gngga_data[13]
+            self.dgps_reference_station_id = gngga_data[14]
+
+        if line.startswith('$GNRMC'):
+            gnrmc_data = line.split(',')
+            self.status = gnrmc_data[2]
+            self.velocity = float(gnrmc_data[7])
+            self.course = float(gnrmc_data[8])
+            self.magnetic_divergence = float(gnrmc_data[10])
+            self.magnetic_divergence_direction = gnrmc_data[11]
+            self.mode = gnrmc_data[12]
+
+    def get_data(self):
+        return {
+            "utc_time": self.utc_time,
+            "latitude": self.latitude,
+            "latitude_direction": self.latitude_direction,
+            "longitude": self.longitude,
+            "longitude_direction": self.longitude_direction,
+            "gps_quality_indicator": self.gps_quality_indicator,
+            "number_of_satellites_used": self.number_of_satellites_used,
+            "hdop": self.hdop,
+            "altitude": self.altitude,
+            "altitude_unit": self.altitude_unit,
+            "geo_id_altitude": self.geo_id_altitude,
+            "geo_id_altitude_unit": self.geo_id_altitude_unit,
+            "time_since_last_dgps_update": self.time_since_last_dgps_update,
+            "dgps_reference_station_id": self.dgps_reference_station_id,
+            "velocity": self.velocity,
+            "course": self.course,
+            "magnetic_divergence": self.magnetic_divergence,
+            "magnetic_divergence_direction": self.magnetic_divergence_direction,
+            "status": self.status,
+            "mode": self.mode
+        }
+
 
 # Endlosschleife zum Lesen der GPS-Daten
+gps = GPS()
 while True:
     try:
-        # Zeile von der seriellen Schnittstelle lesen
-        line_test = ser.readline()#.decode('utf-8').strip()
-        # line = ser.readline().decode('utf-8').strip()
-        print("line_test", line_test)
-        continue
-        # Nur die NMEA-Zeilen verarbeiten
-        if line.startswith('$GNGGA'):
-            GNGGA_data = line.split(',')
-            print("UTC-Zeit:", GNGGA_data[1])
-            print("Breitengrad:", GNGGA_data[2])
-            print("Breitengrad-Richtung:", GNGGA_data[3])
-            print("Längengrad:", GNGGA_data[4])
-            print("Längengrad-Richtung:", GNGGA_data[5])
-            print("GPS-Qualitätsindikator:", GNGGA_data[6])
-            print("Anzahl der verwendeten Satelliten:", GNGGA_data[7])
-            print("HDOP:", GNGGA_data[8])
-            print("Höhe über dem Meeresspiegel:", GNGGA_data[9])
-            print("Höheneinheit:", GNGGA_data[10])
-            print("Geoid-Höhe:", GNGGA_data[11])
-            print("Geoid-Höhen-Einheit:", GNGGA_data[12])
-            print("Zeit seit der letzten DGPS-Aktualisierung:", GNGGA_data[13])
-            print("DGPS-Referenzstation-ID:", GNGGA_data[14])
-
-    #         # Positionsinformationen extrahieren
-    #         latitude = data[2]
-    #         longitude = data[4]
-    #         altitude = data[9]
-    #
-    #         # Ausgabe der GPS-Daten
-    #         print('Latitude: {}'.format(latitude))
-    #         print('Longitude: {}'.format(longitude))
-    #         print('Altitude: {}'.format(altitude))
-        if line.startswith('$GNRMC'):
-            GNRMC_data = line.split(',')
-            print("Status:", GNRMC_data[2])
-            print("Geschwindigkeit über Grund:", GNRMC_data[7])
-            print("Modus:", GNRMC_data[12])
-    #         # Breitengrad und Längengrad extrahieren
-    #         latitude = gps_data[3]
-    #         longitude = gps_data[5]
-    #
-    #         # Ausgabe der GPS-Daten
-    #         print('Latitude:', latitude)
-    #         print('Longitude:', longitude)
+        gps.extract_data()
+        data = gps.get_data()
+        print(data)
     except Exception as e:
         print("Fehler:", str(e))  # Fehlermeldung ausgeben
 
-# # Serielle Verbindung schließen
-# ser.close()
+
