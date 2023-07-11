@@ -56,20 +56,21 @@ class GPS:
 
         if line.startswith('$GNRMC'):
             gnrmc_data = line.split(',')
-            self.compas = float(gnrmc_data[1])
-            self.compas_direction = gnrmc_data[2]
-            self.deviation = float(gnrmc_data[3])
-            self.deviation_direction = gnrmc_data[4]
+            self.status = gnrmc_data[2]
+            self.velocity = float(gnrmc_data[7])
+            self.heading = float(gnrmc_data[8])
+            self.magnetic_divergence = float(gnrmc_data[10])
+            self.magnetic_divergence_direction = gnrmc_data[11]
+            self.mode = gnrmc_data[12]
+
+
 
         if line.startswith('$HCHDG'):
             hchdg_data = line.split(',')
-            self.compas = hchdg_data[2]
-            self.velocity = float(hchdg_data[7])
-            self.heading = float(hchdg_data[8])
-            self.magnetic_divergence = float(hchdg_data[10])
-            self.magnetic_divergence_direction = hchdg_data[11]
-            self.mode = hchdg_data[12]
-
+            self.compas = float(hchdg_data[1])
+            self.compas_direction = hchdg_data[2]
+            self.deviation = float(hchdg_data[3])
+            self.deviation_direction = hchdg_data[4]
     def get_data(self):
         return {
             "utc_time": self.utc_time,
@@ -127,7 +128,7 @@ while True:
     try:
         gps.extract_data()
         data = gps.get_data()
-        # print(data)
+        gps.__str__()
     except Exception as e:
         print("Fehler:", str(e))  # Fehlermeldung ausgeben
 
