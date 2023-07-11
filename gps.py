@@ -19,7 +19,7 @@ class GPS:
     time_since_last_dgps_update: str = ""
     dgps_reference_station_id: str = ""
     velocity: float = 0
-    course: float = 0
+    course: float = None
     magnetic_divergence: float = 0
     magnetic_divergence_direction: str = ""
     status: str = ""
