@@ -1,9 +1,11 @@
 import serial
+from smbus2 import SMBus
 from datetime import datetime
 
 
 class GPS:
     ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=1)
+    bus = SMBus(1)
     utc_time: datetime = None
     latitude: float = None
     latitude_direction: str = None
@@ -29,8 +31,11 @@ class GPS:
     deviation: float = None
     deviation_direction: str = None
 
+
     def extract_data(self):
         line = self.ser.readline().decode('utf-8').strip()
+        b = self.bus.read_byte_data(10, e)
+        print("b", b)
 
         if line.startswith('$GNGGA'):
             gngga_data = line.split(',')
@@ -88,8 +93,8 @@ class GPS:
             "status": self.status,
             "mode": self.mode,
             "compas": self.compas,
-            "compas direction":self.compas_direction,
-            "deviation":self.deviation,
+            "compas direction":self.compas_direction
+            "deviation":self.deviation
             "deviation direction":self.deviation_direction
         }
 
