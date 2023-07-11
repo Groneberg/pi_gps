@@ -64,13 +64,14 @@ class GPS:
             self.mode = gnrmc_data[12]
 
 
-
         if line.startswith('$HCHDG'):
             hchdg_data = line.split(',')
             self.compas = float(hchdg_data[1])
             self.compas_direction = hchdg_data[2]
             self.deviation = float(hchdg_data[3])
             self.deviation_direction = hchdg_data[4]
+
+
     def get_data(self):
         return {
             "utc_time": self.utc_time,
@@ -128,7 +129,7 @@ while True:
     try:
         gps.extract_data()
         data = gps.get_data()
-        gps.__str__()
+        print(data)
     except Exception as e:
         print("Fehler:", str(e))  # Fehlermeldung ausgeben
 
