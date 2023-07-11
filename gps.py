@@ -87,7 +87,7 @@ while True:
     try:
         gps.extract_data()
         data = gps.get_data()
-        print(data)
+        # print(data)
     except Exception as e:
         print("Fehler:", str(e))  # Fehlermeldung ausgeben
 
