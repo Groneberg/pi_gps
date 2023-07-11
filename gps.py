@@ -35,7 +35,6 @@ class GPS:
     def extract_data(self):
         line = self.ser.readline().decode('utf-8').strip()
         b = self.bus.read_byte_data(10, 14)
-        print(self.bus)
         print("b", b)
 
         if line.startswith('$GNGGA'):
