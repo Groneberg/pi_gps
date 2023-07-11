@@ -93,8 +93,8 @@ class GPS:
             "status": self.status,
             "mode": self.mode,
             "compas": self.compas,
-            "compas direction":self.compas_direction
-            "deviation":self.deviation
+            "compas direction":self.compas_direction,
+            "deviation":self.deviation,
             "deviation direction":self.deviation_direction
         }
 
