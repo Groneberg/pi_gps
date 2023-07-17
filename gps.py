@@ -5,7 +5,18 @@ from datetime import datetime
 
 class GPS:
     ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=1)
+
+    # SMBus-Adresse des Kompasschips
+    compass_address = 0x1E
+
+    # Register-Adressen des Kompasschips
+    compass_x_register = 0x03
+    compass_y_register = 0x05
+    compass_z_register = 0x07
+
+    # Initialisiere den SMBus
     bus = SMBus(1)
+
     utc_time: datetime = None
     latitude: float = None
     latitude_direction: str = None
@@ -30,12 +41,18 @@ class GPS:
     compas_direction: str = None
     deviation: float = None
     deviation_direction: str = None
+    compass_x = None
+    compass_y = None
+    compass_z = None
 
 
     def extract_data(self):
         line = self.ser.readline().decode('utf-8').strip()
-        b = self.bus.read_byte_data(10, 14)
-        print("b", b)
+
+        # Lese die Kompasswerte aus den Registern
+        self.compass_x = self.bus.read_byte_data(self.compass_address, self.compass_x_register)
+        self.compass_y = self.bus.read_byte_data(self.compass_address, self.compass_y_register)
+        self.compass_z = self.bus.read_byte_data(self.compass_address, self.compass_z_register)
 
         if line.startswith('$GNGGA'):
             gngga_data = line.split(',')
@@ -97,7 +114,11 @@ class GPS:
             "compas": self.compas,
             "compas direction":self.compas_direction,
             "deviation":self.deviation,
-            "deviation direction":self.deviation_direction
+            "deviation direction":self.deviation_direction,
+            "compass_x":self.compass_x,
+            "compass_y":self.compass_y,
+            "compass_z":self.compass_z
+
         }
 
     def __str__(self):
@@ -120,6 +141,9 @@ class GPS:
         data_str += f"Compas direction: {self.compas_direction}\n"
         data_str += f"Deviation: {self.deviation}\n"
         data_str += f"Deviation direction: {self.deviation_direction}\n"
+        data_str += f"compass_x: {self.compass_x}\n"
+        data_str += f"compass_y: {self.compass_y}\n"
+        data_str += f"compass_z: {self.compass_z}\n"
         return data_str
 
 
