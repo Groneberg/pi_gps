@@ -37,10 +37,10 @@ class GPS:
     magnetic_divergence_direction: str = None
     status: str = None
     mode: str = None
-    compas: float = None
-    compas_direction: str = None
-    deviation: float = None
-    deviation_direction: str = None
+    # compas: float = None
+    # compas_direction: str = None
+    # deviation: float = None
+    # deviation_direction: str = None
     compass_x = None
     compass_y = None
     compass_z = None
@@ -81,12 +81,12 @@ class GPS:
             self.mode = gnrmc_data[12]
 
 
-        if line.startswith('$HCHDG'):
-            hchdg_data = line.split(',')
-            self.compas = float(hchdg_data[1])
-            self.compas_direction = hchdg_data[2]
-            self.deviation = float(hchdg_data[3])
-            self.deviation_direction = hchdg_data[4]
+        # if line.startswith('$HCHDG'):
+        #     hchdg_data = line.split(',')
+        #     self.compas = float(hchdg_data[1])
+        #     self.compas_direction = hchdg_data[2]
+        #     self.deviation = float(hchdg_data[3])
+        #     self.deviation_direction = hchdg_data[4]
 
 
     def get_data(self):
@@ -111,10 +111,10 @@ class GPS:
             "magnetic_divergence_direction": self.magnetic_divergence_direction,
             "status": self.status,
             "mode": self.mode,
-            "compas": self.compas,
-            "compas direction":self.compas_direction,
-            "deviation":self.deviation,
-            "deviation direction":self.deviation_direction,
+            # "compas": self.compas,
+            # "compas direction":self.compas_direction,
+            # "deviation":self.deviation,
+            # "deviation direction":self.deviation_direction,
             "compass_x":self.compass_x,
             "compass_y":self.compass_y,
             "compass_z":self.compass_z
@@ -137,10 +137,10 @@ class GPS:
         data_str += f"Magnetic Divergence: {self.magnetic_divergence} {self.magnetic_divergence_direction}\n"
         data_str += f"Status: {self.status}\n"
         data_str += f"Mode: {self.mode}\n"
-        data_str += f"Compas: {self.compas}\n"
-        data_str += f"Compas direction: {self.compas_direction}\n"
-        data_str += f"Deviation: {self.deviation}\n"
-        data_str += f"Deviation direction: {self.deviation_direction}\n"
+        # data_str += f"Compas: {self.compas}\n"
+        # data_str += f"Compas direction: {self.compas_direction}\n"
+        # data_str += f"Deviation: {self.deviation}\n"
+        # data_str += f"Deviation direction: {self.deviation_direction}\n"
         data_str += f"compass_x: {self.compass_x}\n"
         data_str += f"compass_y: {self.compass_y}\n"
         data_str += f"compass_z: {self.compass_z}\n"
