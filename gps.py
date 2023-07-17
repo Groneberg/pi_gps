@@ -6,15 +6,12 @@ from datetime import datetime
 class GPS:
     ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=1)
 
-    # SMBus-Adresse des Kompasschips
     compass_address = 0x1E
 
-    # Register-Adressen des Kompasschips
     compass_x_register = 0x03
     compass_y_register = 0x05
     compass_z_register = 0x07
 
-    # Initialisiere den SMBus
     bus = SMBus(1)
 
     utc_time: datetime = None
