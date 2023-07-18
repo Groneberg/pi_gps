@@ -1,6 +1,6 @@
 import math
 import serial
-from smbus import SMBus
+import smbus
 from datetime import datetime
 
 
