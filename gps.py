@@ -8,9 +8,9 @@ class GPS:
 
     compass_address = 0x1E
 
-    compass_x_register = 0x03
-    compass_y_register = 0x05
-    compass_z_register = 0x07
+    compass_x_register = 0x04
+    compass_y_register = 0x06
+    compass_z_register = 0x08
 
     bus = SMBus(1)
 
@@ -50,6 +50,14 @@ class GPS:
         self.compass_x = self.bus.read_byte_data(self.compass_address, self.compass_x_register)
         self.compass_y = self.bus.read_byte_data(self.compass_address, self.compass_y_register)
         self.compass_z = self.bus.read_byte_data(self.compass_address, self.compass_z_register)
+
+        # self.compass_x = (self.compass_x << 8) | (self.compass_x >> 8)
+        # self.compass_y =
+        # self.compass_z =
+        #
+        # x = (x << 8) | (x >> 8)
+        # y = (y << 8) | (y >> 8)
+        # z = (z << 8) | (z >> 8)
 
         if line.startswith('$GNGGA'):
             gngga_data = line.split(',')
