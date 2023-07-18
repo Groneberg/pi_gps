@@ -13,8 +13,7 @@ class GPS:
     compass_y_register = 0x05
     compass_z_register = 0x07
 
-    bus = SMBus(1)
-    gauss = 1.3
+    bus = None
     __scales = {
         0.88: [0, 0.73],
         1.30: [1, 0.92],
