@@ -1,3 +1,4 @@
+import math
 import serial
 from smbus2 import SMBus
 from datetime import datetime
@@ -13,6 +14,27 @@ class GPS:
     compass_z_register = 0x07
 
     bus = SMBus(1)
+    gauss = 1.3
+    __scales = {
+        0.88: [0, 0.73],
+        1.30: [1, 0.92],
+        1.90: [2, 1.22],
+        2.50: [3, 1.52],
+        4.00: [4, 2.27],
+        4.70: [5, 2.56],
+        5.60: [6, 3.03],
+        8.10: [7, 4.35],
+    }
+
+    (degrees, minutes) = (0, 0)
+    __declDegrees = degrees
+    __declMinutes = minutes
+    __declination = (degrees + minutes / 60) * math.pi / 180
+    (reg, __scale) = __scales[gauss]
+
+    bus.write_byte_data(compass_address, 0x00, 0x70)  # 8 Average, 15 Hz, normal measurement
+    bus.write_byte_data(compass_address, 0x01, reg << 5)  # Scale
+    bus.write_byte_data(compass_address, 0x02, 0x00) # Continuous measurement
 
     utc_time: datetime = None
     latitude: float = None
@@ -51,13 +73,8 @@ class GPS:
         self.compass_y = self.bus.read_byte_data(self.compass_address, self.compass_y_register)
         self.compass_z = self.bus.read_byte_data(self.compass_address, self.compass_z_register)
 
-        # self.compass_x = (self.compass_x << 8) | (self.compass_x >> 8)
-        # self.compass_y =
-        # self.compass_z =
-        #
-        # x = (x << 8) | (x >> 8)
-        # y = (y << 8) | (y >> 8)
-        # z = (z << 8) | (z >> 8)
+
+
 
         if line.startswith('$GNGGA'):
             gngga_data = line.split(',')
