@@ -8,9 +8,9 @@ class GPS:
 
     compass_address = 0x1E
 
-    compass_x_register = 0x04
-    compass_y_register = 0x06
-    compass_z_register = 0x08
+    compass_x_register = 0x03
+    compass_y_register = 0x05
+    compass_z_register = 0x07
 
     bus = SMBus(1)
 
