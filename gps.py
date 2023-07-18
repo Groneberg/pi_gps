@@ -103,7 +103,7 @@ class GPS:
             self.magnetic_divergence_direction = gnrmc_data[11]
             self.mode = gnrmc_data[12]
 
-        self.temp_heading = self.degrees(self.heading)
+        self.temp_heading = (self.degrees(self.heading))
 
         # if line.startswith('$HCHDG'):
         #     hchdg_data = line.split(',')
