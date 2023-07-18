@@ -40,7 +40,7 @@ class GPS:
     time_since_last_dgps_update: str = None
     dgps_reference_station_id: str = None
     velocity: float = None
-    heading: float = None
+    heading_ser: float = None
     magnetic_divergence: float = None
     magnetic_divergence_direction: str = None
     status: str = None
@@ -98,7 +98,7 @@ class GPS:
             gnrmc_data = line.split(',')
             self.status = gnrmc_data[2]
             self.velocity = float(gnrmc_data[7])
-            self.heading = float(gnrmc_data[8])
+            self.heading_ser = float(gnrmc_data[8])
             self.magnetic_divergence = float(gnrmc_data[10])
             self.magnetic_divergence_direction = gnrmc_data[11]
             self.mode = gnrmc_data[12]
@@ -130,7 +130,7 @@ class GPS:
             "time_since_last_dgps_update": self.time_since_last_dgps_update,
             "dgps_reference_station_id": self.dgps_reference_station_id,
             "velocity": self.velocity,
-            "heading": self.heading,
+            "heading_ser": self.heading_ser,
             "magnetic_divergence": self.magnetic_divergence,
             "magnetic_divergence_direction": self.magnetic_divergence_direction,
             "status": self.status,
@@ -202,7 +202,7 @@ class GPS:
         data_str += f"Time Since Last DGPS Update: {self.time_since_last_dgps_update}\n"
         data_str += f"DGPS Reference Station ID: {self.dgps_reference_station_id}\n"
         data_str += f"Velocity: {self.velocity}\n"
-        data_str += f"Heading: {self.heading}\n"
+        data_str += f"Heading_ser: {self.heading_ser}\n"
         data_str += f"Magnetic Divergence: {self.magnetic_divergence} {self.magnetic_divergence_direction}\n"
         data_str += f"Status: {self.status}\n"
         data_str += f"Mode: {self.mode}\n"
@@ -217,7 +217,7 @@ class GPS:
 
 
 # Endlosschleife zum Lesen der GPS-Daten
-gps = GPS(gauss = 4.7, declination = (-2,5))
+gps = GPS(gauss = 4.7, declination = (4,4))
 while True:
     try:
         gps.extract_data()
